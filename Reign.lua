@@ -42,7 +42,7 @@ function Reign:Update(Data)
 
     if Data.Attributes then
         for attr, value in Data.Attributes do
-            instance:SetAttribute(instance:GetAttribute(attr), value);
+            instance:SetAttribute(attr, value);
         end
     end
 
