@@ -24,8 +24,17 @@ function Reign:Make(Data)
 
     if instance:IsA("TextButton") or instance:IsA("ImageButton") then
         if Data.OnClick then
-            instance.MouseButton1Click:Connect(Data.OnClick);
+            instance[Data.OnClick.Button]:Connect(Data.OnClick.Callback);
         end
+    end
+
+    if Data.OnKeydown then
+        game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+            if gameProcessedEvent then return end;
+            if input.KeyCode == Enum.KeyCode[Data.OnKeydown.Key] then
+                Data.OnKeydown.Callback();
+            end
+        end)
     end
 
     return instance;
@@ -55,8 +64,17 @@ function Reign:Update(Data)
 
     if instance:IsA("TextButton") or instance:IsA("ImageButton") then
         if Data.OnClick then
-            instance.MouseButton1Click:Connect(Data.OnClick);
+            instance[Data.OnClick.Button]:Connect(Data.OnClick.Callback);
         end
+    end
+
+    if Data.OnKeydown then
+        game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+            if gameProcessedEvent then return end;
+            if input.KeyCode == Enum.KeyCode[Data.OnKeydown.Key] then
+                Data.OnKeydown.Callback();
+            end
+        end)
     end
 
     return instance;
