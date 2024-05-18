@@ -32,7 +32,7 @@ function Reign:Make(Data)
         game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
             if gameProcessedEvent then return end;
             if input.KeyCode == Enum.KeyCode[Data.OnKeydown.Key] then
-                task.spawn(Data.OnKeydown.Callback);
+                Data.OnKeydown.Callback();
             end
         end)
     end
@@ -72,7 +72,7 @@ function Reign:Update(Data)
         game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
             if gameProcessedEvent then return end;
             if input.KeyCode == Enum.KeyCode[Data.OnKeydown.Key] then
-                task.spawn(Data.OnKeydown.Callback)
+                Data.OnKeydown.Callback();
             end
         end)
     end
