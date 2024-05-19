@@ -28,15 +28,6 @@ function Reign:Make(Data)
         end
     end
 
-    if Data.OnKeydown then
-        game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
-            if gameProcessedEvent then return end;
-            if input.KeyCode == Enum.KeyCode[Data.OnKeydown.Key] then
-                Data.OnKeydown.Callback();
-            end
-        end)
-    end
-
     return instance;
 end
 
@@ -66,15 +57,6 @@ function Reign:Update(Data)
         if Data.OnClick then
             instance[Data.OnClick.Button]:Connect(Data.OnClick.Callback);
         end
-    end
-
-    if Data.OnKeydown then
-        game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
-            if gameProcessedEvent then return end;
-            if input.KeyCode == Enum.KeyCode[Data.OnKeydown.Key] then
-                Data.OnKeydown.Callback();
-            end
-        end)
     end
 
     return instance;
