@@ -26,6 +26,16 @@ function Reign:Make(Data)
 			instance[Data.OnClick.Button]:Connect(Data.OnClick.Callback);
 		end
 	end
+	
+	if Data.OnKeydown then
+		local key = Data.OnKeydown.Key;
+		local callback = Data.OnKeydown.Callback;
+
+		Reign:OnKeydown({
+			Key = key;
+			Callback = callback
+		})
+	end
 
 	return instance;
 end
@@ -57,37 +67,42 @@ function Reign:Update(Data)
 			instance[Data.OnClick.Button]:Connect(Data.OnClick.Callback);
 		end
 	end
+	
+	if Data.OnKeydown then
+		local key = Data.OnKeydown.Key;
+		local callback = Data.OnKeydown.Callback;
+
+		Reign:OnKeydown({
+			Key = key;
+			Callback = callback
+		})
+	end
 
 	return instance;
 end
 
 function Reign:OnKeydown(Data)
-	local state = false;
-
 	local key = Data.Key;
 	local callback = Data.Callback;
+	
+	local state;
 	local thread;
 
 	game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
 		if gameProcessedEvent then return end;
 		if input.KeyCode == Enum.KeyCode[key] then
-			thread = coroutine.create(function()
+			thread = task.spawn(function()
 				state = true;
 				callback(state);
 			end)
-			coroutine.resume(thread);
-			task.cancel(thread);
 		end
 	end)
-	
+
 	game:GetService("UserInputService").InputEnded:Connect(function(input, gameProcessedEvent)
 		if gameProcessedEvent then return end;
 		if input.KeyCode == Enum.KeyCode[key] then
-			thread = coroutine.create(function()
-				state = false;
-				callback(state);
-			end)
-			coroutine.resume(thread);
+			state = false;
+			callback(state);
 			task.cancel(thread);
 		end
 	end)
