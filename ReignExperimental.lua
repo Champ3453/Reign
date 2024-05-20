@@ -46,6 +46,23 @@ function Reign:Make(Data)
 			Callback = callback;
 		})
 	end
+	
+	if Data.Transition then
+		local time = Data.Transition.Time;
+		local es = Data.Transition.EasingStyle or Data.Transition.ES;
+		local ed = Data.Transition.EasingDirection or Data.Transition.ED;
+		local properties = Data.Transition.Properties or Data.Transition.Prop;
+		local play = Data.Transition.Play or false;
+
+		Reign:Transition({
+			Instance = instance;
+			Time = time;
+			EasingStyle = es;
+			EasingDirection = ed;
+			Properties = properties;
+			Play = play;
+		})
+	end
 
 	return instance;
 end
