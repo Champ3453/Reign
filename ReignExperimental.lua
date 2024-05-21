@@ -46,24 +46,33 @@ function Reign:Make(Data)
 			Callback = callback;
 		})
 	end
-	
+
 	if Data.Transition then
 		local time = Data.Transition.Time;
-		local es = Data.Transition.EasingStyle or Data.Transition.ES;
-		local ed = Data.Transition.EasingDirection or Data.Transition.ED;
-		local properties = Data.Transition.Properties or Data.Transition.Prop;
+		local style = Data.Transition.EasingStyle or Data.Transition.Style;
+		local direction = Data.Transition.EasingDirection or Data.Transition.Direction;
+		local properties = Data.Transition.Properties or Data.Transition.Props;
 		local play = Data.Transition.Play or false;
 
 		Reign:Transition({
-			Instance = instance;
-			Time = time;
-			EasingStyle = es;
-			EasingDirection = ed;
-			Properties = properties;
-			Play = play;
-		})
+			instance;
+			time;
+			style;
+			direction;
+			properties;
+			play;
+		});
 	end
 
+	if Data.OnHover then
+		local callback = Data.OnHover.Callback;
+
+		Reign:OnHover({
+			instance;
+			callback;
+		})
+	end
+	
 	return instance;
 end
 
@@ -97,19 +106,19 @@ function Reign:Update(Data)
 	
 	if Data.Transition then
 		local time = Data.Transition.Time;
-		local es = Data.Transition.EasingStyle or Data.Transition.ES;
-		local ed = Data.Transition.EasingDirection or Data.Transition.ED;
-		local properties = Data.Transition.Properties or Data.Transition.Prop;
+		local style = Data.Transition.EasingStyle or Data.Transition.Style;
+		local direction = Data.Transition.EasingDirection or Data.Transition.Direction;
+		local properties = Data.Transition.Properties or Data.Transition.Props;
 		local play = Data.Transition.Play or false;
 
 		Reign:Transition({
-			Instance = instance;
-			Time = time;
-			EasingStyle = es;
-			EasingDirection = ed;
-			Properties = properties;
-			Play = play;
-		})
+			instance;
+			time;
+			style;
+			direction;
+			properties;
+			play;
+		});
 	end
 
 	return instance;
@@ -159,9 +168,9 @@ end
 function Reign:Transition(Data)
 	local instance = Data.Instance;
 	local time = Data.Time;
-	local es = Data.EasingStyle or Data.ES;
-	local ed = Data.EasingDirection or Data.ED;
-	local properties = Data.Properties or Data.Prop;
+	local es = Data.EasingStyle or Data.Style;
+	local ed = Data.EasingDirection or Data.Direction;
+	local properties = Data.Properties or Data.Props;
 	local play = Data.Play or false;
 
 	if play then
@@ -169,6 +178,22 @@ function Reign:Transition(Data)
 	else
 		return game:GetService("TweenService"):Create(instance, TweenInfo.new(time, Enum.EasingStyle[es], Enum.EasingDirection[ed]), properties);
 	end
+end
+
+function Reign:OnHover(Data)
+	local instance = Data.Instance;
+	local callback = Data.Callback;
+	local state;
+
+	instance.MouseEnter:Connect(function()
+		state = true;
+		callback(state);
+	end);
+
+	instance.MouseLeave:Connect(function()
+		state = false;
+		callback(state);
+	end)
 end
 
 return Reign;
