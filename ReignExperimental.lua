@@ -55,12 +55,12 @@ function Reign:Make(Data)
 		local play = Data.Transition.Play or false;
 
 		Reign:Transition({
-			instance;
-			time;
-			style;
-			direction;
-			properties;
-			play;
+			Instance = instance;
+			Time = time;
+			Style = style;
+			Direction = direction;
+			Properties = properties;
+			Play = play;
 		});
 	end
 
@@ -68,8 +68,8 @@ function Reign:Make(Data)
 		local callback = Data.OnHover.Callback;
 
 		Reign:OnHover({
-			instance;
-			callback;
+			Instance = instance;
+			Callback = callback;
 		})
 	end
 	
@@ -112,12 +112,12 @@ function Reign:Update(Data)
 		local play = Data.Transition.Play or false;
 
 		Reign:Transition({
-			instance;
-			time;
-			style;
-			direction;
-			properties;
-			play;
+			Instance = instance;
+			Time = time;
+			Style = style;
+			Direction = direction;
+			Properties = properties;
+			Play = play;
 		});
 	end
 
