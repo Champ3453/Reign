@@ -72,7 +72,7 @@ function Reign:Make(Data)
 			Callback = callback;
 		})
 	end
-	
+
 	return instance;
 end
 
@@ -104,6 +104,16 @@ function Reign:Update(Data)
 		end
 	end
 	
+	if Data.OnKeydown then
+		local key = Data.OnKeydown.Key;
+		local callback = Data.OnKeydown.Callback;
+
+		Reign:OnKeydown({
+			Key = key;
+			Callback = callback;
+		})
+	end
+
 	if Data.Transition then
 		local time = Data.Transition.Time;
 		local style = Data.Transition.EasingStyle or Data.Transition.Style;
@@ -129,25 +139,38 @@ function Reign:OnKeydown(Data)
 	local callback = Data.Callback;
 
 	local state;
-	local thread;
+	
+	local startThread;
+	local endThread;
+	local ended;
 
-	game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+	return game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
 		if gameProcessedEvent then return end;
+		if input.UserInputType ~= Enum.UserInputType.Keyboard then return end;
+		
 		if input.KeyCode == Enum.KeyCode[key] then
-			thread = task.spawn(function()
+				startThread = task.spawn(function()
 				state = true;
 				callback(state);
 			end)
-		end
-	end)
-
-	game:GetService("UserInputService").InputEnded:Connect(function(input, gameProcessedEvent)
-		if gameProcessedEvent then return end;
-		if input.KeyCode == Enum.KeyCode[key] then
-			state = false;
-			callback(state);
-			task.cancel(thread);
-		end
+		end;
+		
+		ended = input.Changed:Connect(function(prop)
+			if prop == "UserInputState" then
+				if input.UserInputState == Enum.UserInputState.End then
+					if input.KeyCode == Enum.KeyCode[key] then
+						state = false;
+						task.cancel(startThread);
+						endThread = task.spawn(function()
+							state = false;
+							callback(state);
+						end);
+						task.cancel(endThread);
+						ended:Disconnect();
+					end
+				end
+			end
+		end);
 	end)
 end
 
@@ -156,14 +179,16 @@ function Reign:OnKeypress(Data)
 	local callback = Data.Callback;
 	local state = false;
 
-	game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+	return game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
 		if gameProcessedEvent then return end;
+		if input.UserInputType ~= Enum.UserInputType.Keyboard then return end;
+		
 		if input.KeyCode == Enum.KeyCode[key] then
 			state = not state;
 			callback(state);
-		end
-	end)
-end
+		end;
+	end);
+end;
 
 function Reign:Transition(Data)
 	local instance = Data.Instance;
